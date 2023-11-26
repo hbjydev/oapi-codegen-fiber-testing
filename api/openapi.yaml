@@ -1,0 +1,32 @@
+---
+openapi: 3.1.0
+
+info:
+  title: Dummy API for Testing
+  description: The API used to control the service.
+  contact:
+    email: john.doe@example.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.17
+
+servers:
+  - url: /api/v3
+
+paths:
+  /health:
+    get:
+      tags: [internal]
+      summary: Checks the health status of the service.
+      description: Retrieves some basic information about the API.
+      operationId: healthcheck
+      responses:
+        200:
+          description: Successful Healthcheck
+          content:
+            application/json: {}
+        500:
+          description: Failed healthcheck
+          content:
+            application/json: {}
