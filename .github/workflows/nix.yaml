@@ -2,6 +2,8 @@
 name: Build
 on:
   push:
+    branches: [main]
+  pull_request:
 
 jobs:
   build:
@@ -14,10 +16,13 @@ jobs:
       - uses: DeterminateSystems/nix-installer-action@v4
       - uses: DeterminateSystems/magic-nix-cache-action@v2
 
-      - name: Build & push Docker image
+      - name: Build Docker image
         run: |
           nix build .#docker
 
+      - name: Push Docker image
+        if: github.ref == 'refs/heads/main'
+        run: |
           nix develop --command skopeo login \
             -u "${{ github.actor }}" \
             -p "${{ secrets.GITHUB_TOKEN }}" \
