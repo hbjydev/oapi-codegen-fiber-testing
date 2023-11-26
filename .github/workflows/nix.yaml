@@ -18,8 +18,8 @@ jobs:
           nix build .#docker
 
           nix develop --command skopeo login \
-            -u ${{ github.actor }} \
-            -p ${{ secrets.GITHUB_ACTION }} \
+            -u "${{ github.actor }}" \
+            -p "${{ secrets.GITHUB_TOKEN }}" \
             ghcr.io
 
           nix develop --command skopeo copy \
