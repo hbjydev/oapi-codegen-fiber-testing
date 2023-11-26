@@ -1,0 +1,28 @@
+---
+name: Build
+on:
+  push:
+
+jobs:
+  build:
+    name: Build server and client
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: DeterminateSystems/nix-installer-action@v4
+      - uses: DeterminateSystems/magic-nix-cache-action@v2
+
+      - name: Build & push Docker image
+        run: |
+          nix build .#docker
+
+          nix develop --command skopeo login \
+            -u ${{ github.actor }} \
+            -p ${{ secrets.GITHUB_ACTION }} \
+            ghcr.io
+
+          nix develop --command skopeo copy \
+            docker-archive:result \
+            docker://ghcr.io/hbjydev/oapi-codegen-fiber-testing:main \
+            --insecure-policy
